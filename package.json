@@ -1,0 +1,28 @@
+{
+  "name": "eth-toronto-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot to connect acquaintances and make attestations for ETH Toronto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carol-x/eth-toronto-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carol-x/eth-toronto-bot/issues"
+  },
+  "homepage": "https://github.com/carol-x/eth-toronto-bot#readme",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "ethers": "^6.7.1",
+    "js-yaml": "^4.1.0",
+    "mongoose": "^7.4.3",
+    "node-telegram-bot-api": "^0.61.0",
+    "sqlite3": "^5.1.6"
+  }
+}
