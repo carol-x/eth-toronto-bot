@@ -2,20 +2,6 @@ const { ethers } = require("ethers");
 const { EAS, Offchain, SchemaEncoder, SchemaRegistry } = require("@ethereum-attestation-service/eas-sdk");
 const { createWallet } = require('../logic/create_wallet.js');
 
-const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
-// const EASContractAddress = "0xAcfE09Fd03f7812F022FBf636700AdEA18Fd2A7A"; // Base Goerli v0.27
-const schemaRegistryContractAddress = "0x720c2bA66D19A725143FBf5fDC5b4ADA2742682E"; // Base Goerli v0.27
-const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
-const baseGoerliRpc = "https://1rpc.io/base-goerli"; 
-
-function setup_eas(signer) {
-    const eas = new EAS(EASContractAddress);
-    const provider = ethers.getDefaultProvider(baseGoerliRpc);
-    res = eas.connect(signer); 
-    console.log("Connection completed"); 
-    return eas; 
-}
-
 function get_attest(uid) {
     const attestation = (async() => { await eas.getAttestation(uid) })().then(token => { console.log(token) } );
     console.log(attestation);
