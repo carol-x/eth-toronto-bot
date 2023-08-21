@@ -2,8 +2,9 @@ const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('private_database.sqlite3'); // Connect to SQLite database
+const db = new sqlite3.Database('private_database.sqlite3'); 
 const { createWallet } = require('./logic/create_wallet.js');
+const { attestUser } = require("./logic/my_attestation.js"); 
 
 const config = yaml.load(fs.readFileSync('./bot-token.yml', 'utf8'));
 const token = config.telegramBotToken;
@@ -23,7 +24,7 @@ db.serialize(() => {
 
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  let welcomeMessage = `Hi, I am CalfoxBot!\n\nYou can ask me to /setup_wallet.\n\nIf you believe you already have a wallet, \nplease contact our customer service.`;
+  let welcomeMessage = `Hi, I am CalfoxBot!\n\nYou can ask me to /setup_wallet.\n\nIf you believe you already have a wallet, \nplease contact our customer service.\n\nTwo more functions:\n1. /attest_my_friend\n2. /my_attestation`;
 
   db.get('SELECT * FROM users WHERE telegramUserId = ?', [chatId], (err, row) => {
     if (row) {
@@ -83,7 +84,6 @@ bot.onText(/Yes|No/i, async (msg) => {
   }
 });
 
-
 bot.onText(/\/my_wallet/, async (msg) => {
   const chatId = msg.chat.id;
 
@@ -96,4 +96,24 @@ bot.onText(/\/my_wallet/, async (msg) => {
       bot.sendMessage(chatId, "You don't have a wallet address yet. Please use /setup_wallet to create one.");
     }
   });
+});
+
+bot.onText(/\/my_attestation/, (msg) => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, "Please provide your mnemonic phrase:");
+  userStates[chatId] = 'awaiting_mnemonic';
+});
+
+bot.on('message', async (msg) => {
+  const chatId = msg.chat.id;
+  const userState = userStates[chatId];
+
+  if (userState === 'awaiting_mnemonic') {
+    const mnemonicPhrase = msg.text;
+    const attestationUID = await attestUser(mnemonicPhrase);
+
+    bot.sendMessage(chatId, `Your attestation was successful!\nAttestation UID: ${attestationUID}`);
+    delete userStates[chatId];
+  }
 });
