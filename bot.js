@@ -24,11 +24,11 @@ db.serialize(() => {
 
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  let welcomeMessage = `Hi, I am CalfoxBot!\n\nYou can ask me to /setup_wallet.\n\nIf you believe you already have a wallet, \nplease contact our customer service.\n\nTwo more functions:\n1. /attest_my_friend\n2. /my_attestation`;
+  let welcomeMessage = `Hi, I am CalfoxBot!\n\nYou can ask me to /setup_wallet.\n\nIf you believe you already have a wallet, \nplease contact our customer service.`;
 
   db.get('SELECT * FROM users WHERE telegramUserId = ?', [chatId], (err, row) => {
     if (row) {
-      welcomeMessage = `Welcome back!\n\nYour existing account address: ${row.accountAddress}\n\nYou can choose to create a new account using /setup_wallet, but your existing account will be lost.\n\nYou can also use /my_wallet to view your wallet address.`;
+      welcomeMessage = `Welcome back!\n\nYour existing account address: ${row.accountAddress}\n\nYou can choose to create a new account using /setup_wallet, but your existing account will be lost.\n\nYou can also use /my_wallet to view your wallet address.\n\nMore functions:\n1. /attest_my_friend\n2. /my_attestation`;
     }
     bot.sendMessage(chatId, welcomeMessage);
   });
