@@ -15,7 +15,7 @@ async function create_schema() {
     schemaRegistry.connect(signer);
 
     const schema = "bool metIRL, string referReason";
-    const resolverAddress = "0x536e7E5f9d3b06C2ca726a02613e56Cce5c032ad"; 
+    const resolverAddress = "0x0000000000000000000000000000000000000000"; 
     const revocable = true;
 
     const transaction = await schemaRegistry.register({
@@ -29,8 +29,8 @@ async function create_schema() {
 }
 
 // current schema is launched at 
-// https://base-goerli.easscan.org/schema/view/0xfb52b73b02d4e1db5ce3ece8cdfbfe680b014e951fb68d8f8e8cf5584e2e6a4d
-schemaId = "0xfb52b73b02d4e1db5ce3ece8cdfbfe680b014e951fb68d8f8e8cf5584e2e6a4d"; 
+// https://base-goerli.easscan.org/schema/view/0xd9ad50b5f13b095698fafb9b84e64c83bb4dd3076fafbcaceaa68c90edcfc7e0
+schemaId = "0xd9ad50b5f13b095698fafb9b84e64c83bb4dd3076fafbcaceaa68c90edcfc7e0"; 
 
 if (isNewSchema == 'yes') {
     schemaId = create_schema(); 
