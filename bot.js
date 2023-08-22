@@ -126,37 +126,6 @@ bot.onText(/\/start/, async (msg) => {
 //   }
 // });
 
-// // Verify My Friend
-// bot.onText(/\/verify_my_friend/, async (msg) => {
-//   const chatId = msg.chat.id;
-
-//   bot.sendMessage(chatId, "Please provide the following information:");
-//   userStates[chatId] = 'awaiting_verify_my_friend_info';
-// });
-
-// bot.on('message', async (msg) => {
-//   const chatId = msg.chat.id;
-//   const userState = userStates[chatId];
-
-//   if (userState === 'awaiting_verify_my_friend_info') {
-//     const info = msg.text;
-
-//     const infoParts = info.split(',');
-//     if (infoParts.length !== 3) {
-//       bot.sendMessage(chatId, "Invalid input. Please provide the values in the format: metIRL,value1,referReason,value2,target_addr,value3");
-//       return;
-//     }
-
-//     const metIRL = infoParts[1];
-//     const referReason = infoParts[3];
-//     const target_addr = infoParts[5];
-
-//     const verificationMessage = `You provided the following information:\nMet IRL: ${metIRL}\nRefer Reason: ${referReason}\nTarget Address: ${target_addr}`;
-//     bot.sendMessage(chatId, verificationMessage);
-
-//     delete userStates[chatId];
-//   }
-// });
 
 
 // Verify My Friend
@@ -187,6 +156,7 @@ bot.on('message', async (msg) => {
   } else if (userState === 'awaiting_target_addr') {
     const target_addr = msg.text;
 
+    // TODO: 
     const verificationMessage = `You provided the following information:\nMet IRL: ${userInputs[chatId].metIRL}\nRefer Reason: ${userInputs[chatId].referReason}\nTarget Address: ${target_addr}`;
     bot.sendMessage(chatId, verificationMessage);
 
