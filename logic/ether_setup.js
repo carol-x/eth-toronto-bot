@@ -21,13 +21,13 @@ async function create_schema() {
     const resolverAddress = "0x536e7E5f9d3b06C2ca726a02613e56Cce5c032ad"; 
     const revocable = true;
 
-    const transaction = await schemaRegistry.register({
-    schema,
-    resolverAddress,
-    revocable,
-    });
+    // const transaction = await schemaRegistry.register({
+    // schema,
+    // resolverAddress,
+    // revocable,
+    // });
 
-    return transaction; 
+    // return transaction; 
 }
 
 transaction = create_schema(); 

@@ -9,7 +9,7 @@ eas.connect(signer);
 
 const schema = "bool metIRL, string referReason";
 const schemaEncoder = new SchemaEncoder(schema);
-const schemaUID = "0xb16fa048b0d597f5a821747eba64efa4762ee5143e9a80600d0005386edfc995";
+const schemaUID = "0xfb52b73b02d4e1db5ce3ece8cdfbfe680b014e951fb68d8f8e8cf5584e2e6a4d";
 
 async function create_friend_attestation(metIRL, perferReason, target_addr) {
 
@@ -34,3 +34,7 @@ async function create_friend_attestation(metIRL, perferReason, target_addr) {
     console.log("New attestation UID:", newAttestationUID);
     return newAttestationUID; 
 }
+
+// test
+newAttestationUID = create_friend_attestation(true, "college friends", "0x6633338E73f4495f02B355D2705Be9FebD8b381D");
+console.log(newAttestationUID);
