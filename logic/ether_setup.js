@@ -1,6 +1,6 @@
 const { ethers } = require("ethers");
 const { EAS, Offchain, SchemaEncoder, SchemaRegistry } = require("@ethereum-attestation-service/eas-sdk");
-const { createWallet } = require('../logic/create_wallet.js');
+const { retrieveWallet } = require('../logic/create_wallet.js');
 const { setupEAS } = require('../logic/setup_eas.js');
 
 function get_attest(uid) {
@@ -9,7 +9,7 @@ function get_attest(uid) {
     return attestation;
 }
 
-signer = createWallet();
+signer = retrieveWallet();
 eas = setupEAS(signer); 
 
 async function create_schema() {
@@ -60,6 +60,12 @@ async function testAttestation(eas) {
 
     const newAttestationUID = await tx.wait();
     return newAttestationUID; 
+}
+
+module.exports.myAttestation = async function myAttestation(pvtKey=null) {
+    const signer = retrieveWallet();
+    const eas = setupEAS(signer);     
+    return testAttestation(eas);
 }
 
 // const newAttestationUID = testAttestation(eas); 

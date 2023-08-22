@@ -1,6 +1,6 @@
 const { ethers } = require("ethers");
 const { SchemaRegistry } = require("@ethereum-attestation-service/eas-sdk");
-const { createWallet } = require('../logic/create_wallet.js');
+const { retrieveWallet } = require('../logic/create_wallet.js');
 const prompt = require('prompt-sync')();
 
 const isNewSchema = prompt('Are you launching a new schema?');
@@ -8,7 +8,7 @@ const isNewSchema = prompt('Are you launching a new schema?');
 const schemaRegistryContractAddress = "0x720c2bA66D19A725143FBf5fDC5b4ADA2742682E"; // Base Goerli v0.27
 const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
 
-signer = createWallet();
+signer = retrieveWallet();
 // schemaRegistry.connect(signer);
 
 async function create_schema() {
