@@ -10,9 +10,9 @@ const baseGoerliRpc = "https://1rpc.io/base-goerli";
 const eas = new EAS(EASContractAddress);
 // const uid = prompt('What is the UID to verify?');
 
-module.exports.verifyAttestation = async function verifyAttestation(uid, pvtKey=null) {
+module.exports.verifyAttestation = async function verifyAttestation(uid) {
     // FIXME: We actaully input a private key for this verification.
-    const signer = retrieveWallet(pvtKey);
+    const signer = retrieveWallet(null);
     eas.connect(signer);
     const attestation = await eas.getAttestation(uid);
     console.log("Your attester is %s, recipient is %s, and data is %s", attestation.attester, attestation.recipient, attestation.data); 

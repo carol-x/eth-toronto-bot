@@ -9,13 +9,19 @@ module.exports.createWallet = function createWallet() {
     return account;
 }
 
+const global_private_key = process.env.PRIVATE_KEY;
+
 // internal utility function 
 module.exports.retrieveWallet = function retrieveWallet(privateKey) {
-    privateKey = process.env.PRIVATE_KEY;
-    const wallet = new ethers.Wallet(privateKey);
+    console.log("00000");
+    const wallet = new ethers.Wallet(global_private_key);
+    console.log("0000011111111");
+
     
     console.log("Your account is created! Address is %s. \n", wallet.address);
     provider = ethers.getDefaultProvider(baseGoerliRpc); 
+    console.log("00000222222");
     signer = wallet.connect(provider);
+    console.log("00000333333");
     return signer;
 }
