@@ -130,7 +130,7 @@ bot.onText(/\/view_my_wallet/, async (msg) => {
 // Verify my friend
 bot.onText(/\/verify_my_friend/, async (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "Which friend are you going to verify?");
+  bot.sendMessage(chatId, "Who do you want to verify?");
   userStates[chatId] = 'awaiting_friend_verification';
 });
 
@@ -144,48 +144,49 @@ bot.on('message', async (msg) => {
 
     // Assuming "Fred" is the friend we're verifying
     if (friendName.toLowerCase() === 'fred') {
-      db.get('SELECT attestations FROM users WHERE accountAddress = ?', ["12321123"], (err, row) => {
-        if (row) {
-          const attestations = JSON.parse(row.attestations);
-          if (attestations.length > 0) {
-            userInputs[chatId] = {
-              attestations: attestations,
-            };
+      const options = ['A', 'B', 'C'];
+      const keyboard = options.map((option) => [{ text: option }]);
+      const message = "Please choose a scheme (A, B, or C):";
 
-            const options = attestations.map((attestation, index) => `${index + 1}. ${attestation}`);
-            const keyboard = options.map((option, index) => [{ text: `${index + 1}` }]);
-            const attestationsMessage = "Please choose an attestation:";
-            bot.sendMessage(chatId, attestationsMessage, {
-              reply_markup: {
-                keyboard: keyboard,
-                resize_keyboard: true,
-                one_time_keyboard: true,
-              },
-            });
-            userStates[chatId] = 'awaiting_attestation_choice';
-          } else {
-            bot.sendMessage(chatId, "Your friend Fred doesn't have any attestations.");
-            delete userStates[chatId];
-          }
-        } else {
-          bot.sendMessage(chatId, "Your friend Fred doesn't exist.");
-          delete userStates[chatId];
-        }
+      bot.sendMessage(chatId, message, {
+        reply_markup: {
+          keyboard: keyboard,
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        },
       });
+      userStates[chatId] = 'awaiting_scheme_selection';
     } else {
       bot.sendMessage(chatId, "The user does not exist.");
       delete userStates[chatId];
     }
-  } else if (userState === 'awaiting_attestation_choice') {
-    const choice = parseInt(msg.text);
-    if (!isNaN(choice) && choice > 0 && choice <= userInputs[chatId].attestations.length) {
-      const selectedAttestation = userInputs[chatId].attestations[choice - 1];
-      //TODO: Fred Checkout
-      bot.sendMessage(chatId, `You selected: ${selectedAttestation}`);
+  } else if (userState === 'awaiting_scheme_selection') {
+    const selectedScheme = msg.text.trim().toUpperCase();
+
+    // Memorize the selected scheme
+    userInputs[chatId] = {
+      selectedScheme: selectedScheme,
+    };
+
+    bot.sendMessage(chatId, `You selected scheme ${selectedScheme}. Do you want to use the default value? (Yes/No)`);
+    userStates[chatId] = 'awaiting_default_value_decision';
+  } else if (userState === 'awaiting_default_value_decision') {
+    const decision = msg.text.trim().toLowerCase();
+
+    if (decision === 'yes') {
+      const selectedScheme = userInputs[chatId].selectedScheme;
+
+      // Reply with the selected scheme and the decision
+      // TODO: Fred here
+      bot.sendMessage(chatId, `You selected scheme ${selectedScheme}. You have chosen to use the default value.`);
+    } else if (decision === 'no') {
+      bot.sendMessage(chatId, "You chose not to use the default value.");
     } else {
-      bot.sendMessage(chatId, "Invalid choice. Please choose a valid option.");
+      bot.sendMessage(chatId, "Invalid choice. Please reply with 'Yes' or 'No'.");
     }
+
     delete userStates[chatId];
+    delete userInputs[chatId];
   }
 });
 
@@ -260,81 +261,3 @@ async function hello0011001(uid) {
 //     }
 //   });
 // });
-
-
-
-
-
-
-
-
-
-
-
-
-// // Verify Attestation!!!
-// bot.onText(/\/verify_attestation/, async (msg) => {
-//   const chatId = msg.chat.id;
-
-//   bot.sendMessage(chatId, "Please provide the UID of the attestation you want to verify:");
-//   userStates[chatId] = 'awaiting_attestation_uid';
-// });
-
-
-// // All replies
-// bot.on('message', async (msg) => {
-//   const chatId = msg.chat.id;
-//   const userState = userStates[chatId];
-
-//   // Verify Attestation Real Logic
-//   if (userState === 'awaiting_attestation_uid') {
-//     const attestationUID = msg.text;
-//     bot.sendMessage(chatId, `You provided the following attestation UID: ${attestationUID}`);
-//     const attestation = await verifyAttestation(attestationUID);
-//     bot.sendMessage("Your attester is %s, recipient is %s, and data is %s", attestation.attester, attestation.recipient, attestation.data);
-//     delete userStates[chatId];
-//   }
-// });
-
-
-
-// // Verify My Friend
-// bot.onText(/\/verify_my_friend/, async (msg) => {
-//   const chatId = msg.chat.id;
-
-//   // Initialize userInputs for this chatId
-//   userInputs[chatId] = {};
-
-//   bot.sendMessage(chatId, "Please provide the value of metIRL:");
-//   userStates[chatId] = 'awaiting_metIRL';
-// });
-
-// bot.on('message', async (msg) => {
-//   const chatId = msg.chat.id;
-//   const userState = userStates[chatId];
-
-//   if (userState === 'awaiting_metIRL') {
-//     const metIRL = msg.text;
-//     bot.sendMessage(chatId, "Please provide the value of referReason:");
-//     userStates[chatId] = 'awaiting_referReason';
-//     userInputs[chatId].metIRL = metIRL;
-//   } else if (userState === 'awaiting_referReason') {
-//     const referReason = msg.text;
-//     bot.sendMessage(chatId, "Please provide the value of target_addr:");
-//     userStates[chatId] = 'awaiting_target_addr';
-//     userInputs[chatId].referReason = referReason;
-//   } else if (userState === 'awaiting_target_addr') {
-//     const target_addr = msg.text;
-
-//     // TODO: 
-//     const verificationMessage = `You provided the following information:\nMet IRL: ${userInputs[chatId].metIRL}\nRefer Reason: ${userInputs[chatId].referReason}\nTarget Address: ${target_addr}`;
-//     bot.sendMessage(chatId, verificationMessage);
-
-//     delete userStates[chatId];
-//     delete userInputs[chatId];
-//   }
-// });
-
-
-
-
