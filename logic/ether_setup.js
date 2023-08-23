@@ -1,6 +1,7 @@
 const { ethers } = require("ethers");
 const { EAS, Offchain, SchemaEncoder, SchemaRegistry } = require("@ethereum-attestation-service/eas-sdk");
 const { createWallet } = require('../logic/create_wallet.js');
+const { setupEAS } = require('../logic/setup_eas.js');
 
 function get_attest(uid) {
     const attestation = (async() => { await eas.getAttestation(uid) })().then(token => { console.log(token) } );
@@ -9,22 +10,24 @@ function get_attest(uid) {
 }
 
 signer = createWallet();
-eas = setup_eas(signer); 
+eas = setupEAS(signer); 
 
 async function create_schema() {
+    const schemaRegistryContractAddress = "0x720c2bA66D19A725143FBf5fDC5b4ADA2742682E"; // Base Goerli v0.27
+    const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
     schemaRegistry.connect(signer);
 
     const schema = "bool personalFriend, string referReason";
     const resolverAddress = "0x536e7E5f9d3b06C2ca726a02613e56Cce5c032ad"; 
     const revocable = true;
 
-    const transaction = await schemaRegistry.register({
-    schema,
-    resolverAddress,
-    revocable,
-    });
+    // const transaction = await schemaRegistry.register({
+    // schema,
+    // resolverAddress,
+    // revocable,
+    // });
 
-    return transaction; 
+    // return transaction; 
 }
 
 transaction = create_schema(); 
