@@ -22,4 +22,8 @@ The bot's features break down as follows:
 3. `/logic/create_wallet.js` handles all the interactions to setup and connect wallet on Base
 4. `/logic/create_attestation.js` takes in the schema and schema ID and encodes the attester's parameters to file attestation 
 5. `/logic/verify_attestation.js` takes the UID of an attestation and validates its existence on-chain and returns the values stored in the attestation 
-6. `bot.js` handles the logic with Telegram bot launcher 
+6. `bot.js` handles the logic with Telegram bot launcher
+
+## Project Demo
+
+The project demo is (here)[https://youtu.be/YvrJwQvfnKY]. Check it out and let us know feedbacks! 
