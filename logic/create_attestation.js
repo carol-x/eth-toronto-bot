@@ -17,6 +17,12 @@ const schemas = {
     "fans": "bool Swift, bool Sheeran, bool Coldplay, bool EDM"
 }
 
+const schemasUID = {
+    "skills": "0x1412c2e5a81110b9873daf1681de462199d92b8da1d7c4dd187775e0f1892943", 
+    "referral": "0x2c0c0e26502d5551b274184bd0296653e7d87daf4dbe46a40be372127e713744", 
+    "fans": "0x6916bde9b639ba59e0aae0d39af6e25e751cebf3442e3c31fd11c82c128dba3f"
+}
+
 async function create_friend_attestation(metIRL, perferReason, target_addr) {
 
     const schema = "bool metIRL, string referReason";
