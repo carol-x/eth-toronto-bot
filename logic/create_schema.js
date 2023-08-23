@@ -20,7 +20,6 @@ const schemas = {
 async function create_schema(schema) {
     schemaRegistry.connect(signer);
 
-    const schema = "bool metIRL, string referReason";
     const resolverAddress = "0x0000000000000000000000000000000000000000"; 
     const revocable = true;
 
@@ -30,6 +29,7 @@ async function create_schema(schema) {
         revocable,
     });
     schemaId = await transaction.wait();
+    console.log("Your current schema UID is %s", schemaId); 
 
     return schemaId; 
 }
@@ -42,6 +42,5 @@ if (newSchemaName != "no") {
     schemaId = create_schema(schemas[newSchemaName]); 
 }
 
-console.log("Your current schema UID is %s", schemaId); 
 const schemaRecord = (async() => { await schemaRegistry.getSchema({ uid: schemaId }) })().then(token => { console.log(token) } ); 
 console.log(schemaRecord);
