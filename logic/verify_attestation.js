@@ -4,11 +4,14 @@ const { setupEAS } = require('../logic/setup_eas.js');
 const { retrieveWallet } = require('../logic/create_wallet.js');
 const prompt = require('prompt-sync')();
 
+const EASContractAddress = "0xAcfE09Fd03f7812F022FBf636700AdEA18Fd2A7A"; // Base Goerli v0.27
+const baseGoerliRpc = "https://1rpc.io/base-goerli"; 
+
+const eas = new EAS(EASContractAddress);
 // const uid = prompt('What is the UID to verify?');
 
 module.exports.verifyAttestation = async function verifyAttestation(uid, pvtKey=null) {
     // FIXME: We actaully input a private key for this verification.
-    const eas = setupEAS();
     const signer = retrieveWallet();
     eas.connect(signer);
     const attestation = await eas.getAttestation(uid);

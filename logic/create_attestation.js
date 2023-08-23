@@ -1,15 +1,13 @@
 const { EAS, SchemaEncoder } = require("@ethereum-attestation-service/eas-sdk");
+const { ethers } = require("ethers");
 const { retrieveWallet } = require('../logic/create_wallet.js');
-const { setupEAS } = require('../logic/setup_eas.js');
+require('dotenv').config();
 
 const EASContractAddress = "0xAcfE09Fd03f7812F022FBf636700AdEA18Fd2A7A"; // Base Goerli v0.27
-eas = setupEAS();
-signer = retrieveWallet();
-eas.connect(signer);
+const baseGoerliRpc = "https://1rpc.io/base-goerli"; 
 
-const schema = "bool metIRL, string referReason";
-const schemaEncoder = new SchemaEncoder(schema);
-const schemaUID = "0xd9ad50b5f13b095698fafb9b84e64c83bb4dd3076fafbcaceaa68c90edcfc7e0";
+const eas = new EAS(EASContractAddress);
+const provider = ethers.getDefaultProvider(baseGoerliRpc);
 
 const schemas = {
     "skills": "uint8 PythonLevel, uint8 JSLevel, uint8 RustLevel, uint8 DesignLevel, uint8 AlgoLevel", 
@@ -23,19 +21,45 @@ const schemasUID = {
     "fans": "0x6916bde9b639ba59e0aae0d39af6e25e751cebf3442e3c31fd11c82c128dba3f"
 }
 
-async function createFriendAttestation(metIRL, perferReason, target_addr) {
+async function createAttestation(schemaType, targetAddr, privateKey) {
 
-    const schema = "bool metIRL, string referReason";
+    signer = retrieveWallet(privateKey);
+    eas.connect(signer);
+
+    const defaultParams = {
+        "skills": [4, 3, 5, 1, 2], 
+        "referral": [3, 'Met at ETH Toronto'], 
+        "fans": [true, true, false, false]
+    }
+
+    const schema = schemas[schemaType];
     const schemaEncoder = new SchemaEncoder(schema);
-    const encodedData = schemaEncoder.encodeData([
-    { name: "metIRL", value: metIRL, type: "bool" },
-    { name: "referReason", value: perferReason, type: "string" },
-    ]);
-
+    if (schemaType == 'skills') {
+        encodedData = schemaEncoder.encodeData([
+            { name: "PythonLevel", value: defaultParams['skills'][0], type: "uint8" },
+            { name: "JSLevel", value: defaultParams['skills'][1], type: "uint8" },
+            { name: "RustLevel", value: defaultParams['skills'][2], type: "uint8" },
+            { name: "DesignLevel", value: defaultParams['skills'][3], type: "uint8" },
+            { name: "AlgoLevel", value: defaultParams['skills'][4], type: "uint8" },
+        ]);
+    } else if (schemaType == 'referral') {
+        encodedData = schemaEncoder.encodeData([
+            { name: "ReferLevel", value: defaultParams['referral'][0], type: "bool" },
+            { name: "ReferReason", value: defaultParams['referral'][1], type: "string" },
+        ]);
+    } else {
+        encodedData = schemaEncoder.encodeData([
+            { name: "Swift", value: defaultParams['fans'][0], type: "bool" },
+            { name: "Sheeran", value: defaultParams['fans'][1], type: "bool" },
+            { name: "Coldplay", value: defaultParams['fans'][2], type: "bool" },
+            { name: "EDM", value: defaultParams['fans'][3], type: "bool" },
+        ]);
+    }
+    
     const tx = await eas.attest({
-    schema: schemaUID,
+    schema: schemasUID[schemaType],
     data: {
-        recipient: target_addr,
+        recipient: targetAddr,
         expirationTime: 0,
         revocable: true, 
         data: encodedData,
@@ -48,5 +72,5 @@ async function createFriendAttestation(metIRL, perferReason, target_addr) {
 }
 
 // test
-newAttestationUID = createFriendAttestation(true, "college friends", "0x6633338E73f4495f02B355D2705Be9FebD8b381D");
+newAttestationUID = createAttestation("skills", "0x6633338E73f4495f02B355D2705Be9FebD8b381D", process.env.PRIVATE_KEY);
 
