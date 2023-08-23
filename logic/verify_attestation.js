@@ -12,7 +12,7 @@ const eas = new EAS(EASContractAddress);
 
 module.exports.verifyAttestation = async function verifyAttestation(uid, pvtKey=null) {
     // FIXME: We actaully input a private key for this verification.
-    const signer = retrieveWallet();
+    const signer = retrieveWallet(pvtKey);
     eas.connect(signer);
     const attestation = await eas.getAttestation(uid);
     console.log("Your attester is %s, recipient is %s, and data is %s", attestation.attester, attestation.recipient, attestation.data); 
