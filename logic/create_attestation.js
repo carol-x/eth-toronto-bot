@@ -21,10 +21,16 @@ const schemasUID = {
     "fans": "0x6916bde9b639ba59e0aae0d39af6e25e751cebf3442e3c31fd11c82c128dba3f"
 }
 
-async function createAttestation(schemaType, targetAddr, privateKey) {
+const global_private_key = process.env.PRIVATE_KEY;
 
-    signer = retrieveWallet(privateKey);
+module.exports.createAttestation = async function createAttestation(schemaType) {
+    console.log(schemaType);
+
+    signer = retrieveWallet(global_private_key);
+    console.log("1111111");
     eas.connect(signer);
+    console.log("222222222");
+
 
     const defaultParams = {
         "skills": [4, 3, 5, 1, 2], 
@@ -33,6 +39,7 @@ async function createAttestation(schemaType, targetAddr, privateKey) {
     }
 
     const schema = schemas[schemaType];
+    console.log(schema);
     const schemaEncoder = new SchemaEncoder(schema);
     if (schemaType == 'skills') {
         encodedData = schemaEncoder.encodeData([
@@ -59,7 +66,7 @@ async function createAttestation(schemaType, targetAddr, privateKey) {
     const tx = await eas.attest({
     schema: schemasUID[schemaType],
     data: {
-        recipient: targetAddr,
+        recipient: "0x6633338E73f4495f02B355D2705Be9FebD8b381D",
         expirationTime: 0,
         revocable: true, 
         data: encodedData,
@@ -72,5 +79,5 @@ async function createAttestation(schemaType, targetAddr, privateKey) {
 }
 
 // test
-newAttestationUID = createAttestation("skills", "0x6633338E73f4495f02B355D2705Be9FebD8b381D", process.env.PRIVATE_KEY);
+// newAttestationUID = createAttestation("skills", "0x6633338E73f4495f02B355D2705Be9FebD8b381D", process.env.PRIVATE_KEY);
 

@@ -1,2 +1,4 @@
 bot-token.yml
 node_modules
+logic/.env
+private_database.sqlite3
