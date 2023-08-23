@@ -11,6 +11,12 @@ const schema = "bool metIRL, string referReason";
 const schemaEncoder = new SchemaEncoder(schema);
 const schemaUID = "0xd9ad50b5f13b095698fafb9b84e64c83bb4dd3076fafbcaceaa68c90edcfc7e0";
 
+const schemas = {
+    "skills": "uint8 PythonLevel, uint8 JSLevel, uint8 RustLevel, uint8 DesignLevel, uint8 AlgoLevel", 
+    "referral": "uint8 ReferLevel, string ReferReason", 
+    "fans": "bool Swift, bool Sheeran, bool Coldplay, bool EDM"
+}
+
 async function createFriendAttestation(metIRL, perferReason, target_addr) {
 
     const schema = "bool metIRL, string referReason";
