@@ -3,7 +3,7 @@ const { SchemaRegistry } = require("@ethereum-attestation-service/eas-sdk");
 const { retrieveWallet } = require('../logic/create_wallet.js');
 const prompt = require('prompt-sync')();
 
-const isNewSchema = prompt('Are you launching a new schema?');
+const newSchemaName = prompt('Are you launching a new schema?');
 
 const schemaRegistryContractAddress = "0x720c2bA66D19A725143FBf5fDC5b4ADA2742682E"; // Base Goerli v0.27
 const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
@@ -11,7 +11,13 @@ const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
 signer = retrieveWallet();
 // schemaRegistry.connect(signer);
 
-async function create_schema() {
+const schemas = {
+    "skills": "uint8 PythonLevel, uint8 JSLevel, uint8 RustLevel, uint8 DesignLevel, uint8 AlgoLevel", 
+    "referral": "uint8 ReferLevel, string ReferReason", 
+    "fans": "bool Swift, bool Sheeran, bool Coldplay, bool EDM"
+}
+
+async function create_schema(schema) {
     schemaRegistry.connect(signer);
 
     const schema = "bool metIRL, string referReason";
@@ -32,8 +38,8 @@ async function create_schema() {
 // https://base-goerli.easscan.org/schema/view/0xd9ad50b5f13b095698fafb9b84e64c83bb4dd3076fafbcaceaa68c90edcfc7e0
 schemaId = "0xd9ad50b5f13b095698fafb9b84e64c83bb4dd3076fafbcaceaa68c90edcfc7e0"; 
 
-if (isNewSchema == 'yes') {
-    schemaId = create_schema(); 
+if (newSchemaName != "no") {
+    schemaId = create_schema(schemas[newSchemaName]); 
 }
 
 console.log("Your current schema UID is %s", schemaId); 
