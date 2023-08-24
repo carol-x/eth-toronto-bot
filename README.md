@@ -27,3 +27,8 @@ The bot's features break down as follows:
 ## Project Demo
 
 The project demo is (here)[https://youtu.be/YvrJwQvfnKY]. Check it out and let us know feedbacks! 
+
+Attestations on Base Goerli: 
+- (Attest skills)[https://base-goerli.easscan.org/schema/view/0x1412c2e5a81110b9873daf1681de462199d92b8da1d7c4dd187775e0f1892943]
+- (Attest referrals)[https://base-goerli.easscan.org/schema/view/0x2c0c0e26502d5551b274184bd0296653e7d87daf4dbe46a40be372127e713744]
+- (Attest fans)[https://base-goerli.easscan.org/schema/view/0x6916bde9b639ba59e0aae0d39af6e25e751cebf3442e3c31fd11c82c128dba3f]
